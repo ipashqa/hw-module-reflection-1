@@ -22,13 +22,20 @@ namespace HW_Reflection_1
 
                 object list = Activator.CreateInstance(closedType);
 
-                MethodInfo addMethodInfo = closedType.GetMethod("Add");
-
-                for (int i = 0; i < 5; i++)
+                if (typeInList.IsValueType || typeInList.GetConstructor(Type.EmptyTypes) != null)
                 {
-                    addMethodInfo.Invoke(list, new object[] { Activator.CreateInstance(typeInList) });
+                    MethodInfo addMethodInfo = closedType.GetMethod("Add");
 
-                    Console.WriteLine($"Value {i}: { ((IList)list)[i] }");
+                    for (int i = 0; i < 5; i++)
+                    {
+                        addMethodInfo.Invoke(list, new object[] { Activator.CreateInstance(typeInList) });
+
+                        Console.WriteLine($"Value {i}: { ((IList)list)[i] }");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"\nIt's impossible to create instance of {typeInList} type because the type doesn't have default constructor.");
                 }
 
                 // The second variant (Easier): 
